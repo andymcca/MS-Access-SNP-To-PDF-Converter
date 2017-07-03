@@ -9,8 +9,9 @@ namespace GraphicalVersion
 {
 
     /// <summary>
-    /// Author: Jervis Muindi
+    /// Original Author: Jervis Muindi
     /// Class that deals with conversion of snapshot files to PDFs. 
+    /// Additional code to workaround PDF conversion security issue and fix broken SNP files by Andrew McCarthy
     /// </summary>    
     public static class Snapshot
     {
@@ -42,7 +43,6 @@ namespace GraphicalVersion
                 return false;
             }
 
-
             string compressedFilepath = Path.Combine(directory, compressedSnapshotName);
 
             string uncompressedSnapshot = getUncompressedSnapshot(compressedFilepath);  // get the full path of the uncompressed snapshot file
@@ -52,9 +52,8 @@ namespace GraphicalVersion
 
             // COULD DO - check previous result before moving on to conversion
 
+            // Convert uncompressed Snapshot to PDF
             result = convertToPDF(uncompressedSnapshot);
-
-            // TO DO - Delete the temporary file. 
 
             // remove previous temp file if it exists already. 
             if (File.Exists(uncompressedSnapshot))
@@ -76,8 +75,6 @@ namespace GraphicalVersion
                 return null;
             }
 
-
-
             string dir = Path.GetDirectoryName(compressedSnapshot);
             string tempName = Path.GetFileNameWithoutExtension(compressedSnapshot) + ".tmp";
             string tempPath = Path.Combine(dir, tempName);
@@ -91,8 +88,6 @@ namespace GraphicalVersion
 
         }
 
-
-
         public static bool convertToPDF(string uncompressedSnapshotName)
         {
             string outputPDF = Path.GetFileNameWithoutExtension(uncompressedSnapshotName) + ".pdf";
@@ -102,8 +97,6 @@ namespace GraphicalVersion
              * This used in the MergePDFDocuments function below
              */
             string dummyPDF = Path.GetFileNameWithoutExtension(uncompressedSnapshotName) + "_dummy.pdf";
-
-            //SetDefaultPrinter("Fax");
 
             bool r = false;
             try
@@ -128,12 +121,6 @@ namespace GraphicalVersion
             return r;
         }
 
-        /*
-        public static bool convertToPDF(string uncompressedSnapshotName)
-        {
-            string outputPDF = Path.GetFileNameWithoutExtension(uncompressedSnapshotName) + ".pdf";
-            return ConvertUncompressedSnapshot(uncompressedSnapshotName, outputPDF, 0, "", "", 1, 0, 0);
-        }*/
 
 
         [DllImport("setupapi.dll")]

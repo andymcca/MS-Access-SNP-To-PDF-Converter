@@ -94,7 +94,7 @@ namespace GraphicalVersion
 
             /*
              * The following string contains a path to a PDF file which doesn't exist
-             * This used in the MergePDFDocuments function below
+             * This is used in the MergePDFDocuments function below
              */
             string dummyPDF = Path.GetFileNameWithoutExtension(uncompressedSnapshotName) + "_dummy.pdf";
 
